@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: penpot-frontend
+    env: docker
+    repo: https://github.com/penpot/penpot
+    dockerContext: .
+    dockerfilePath: docker/Dockerfile.frontend
+    autoDeploy: true
+    envVars:
+      - key: PENPOT_PUBLIC_URI
+        value: https://penpot.onrender.com
+      - key: PENPOT_FLAGS
+        value: ":enable-registration:"
+
+  - type: web
+    name: penpot-backend
+    env: docker
+    repo: https://github.com/penpot/penpot
+    dockerContext: .
+    dockerfilePath: docker/Dockerfile.backend
+    autoDeploy: true
+    envVars:
+      - key: PENPOT_PUBLIC_URI
+        value: https://penpot.onrender.com
+      - key: PENPOT_FLAGS
+        value: ":enable-registration:"
+      - key: PENPOT_REDIS_HOST
+        value: redis
+      - key: PENPOT_DB_HOST
+        value: postgres
+
+  - type: redis
+    name: redis
+
+  - type: postgres
+    name: postgres
+    plan: free
+    envVars:
+      - key: POSTGRES_DB
+        value: penpot
+      - key: POSTGRES_USER
+        value: penpot
+      - key: POSTGRES_PASSWORD
+        generateValue: true
